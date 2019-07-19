@@ -8,7 +8,12 @@
 #include <stdint.h>
 #include <math.h>
 #include <unordered_map>
-#include <SFML/Graphics.hpp>
+#include"System\FpsCounter.h"
+#include<iostream>
+using namespace std;
+
+
+
 
 const int screenWidth = 1280;
 const int screenHeight = 720;
@@ -168,8 +173,8 @@ int main() {
     sf::Vector2f plane(-0.66f, 0.0f); // 2d raycaster version of the camera plane,
                                      // must be perpendicular to rotation
     float size_f = 0.375f; // dimensions of player collision box, in tiles
-    float moveSpeed = 5.0f; // player movement speed in tiles per second
-    float rotateSpeed = 3.0f; // player rotation speed in radians per second
+    float moveSpeed = 2.0f; // player movement speed in tiles per second
+    float rotateSpeed = 1.0f; // player rotation speed in radians per second
 
     sf::Vector2f size(size_f, size_f); // player collision box width and height, derived from size_f
 
@@ -186,30 +191,10 @@ int main() {
     // lines used to draw walls and floors on the screen
     sf::VertexArray lines(sf::Lines, 18 * screenWidth);
 
-    sf::Text fpsText("", font, 50); // text object for FPS counter
-    sf::Clock clock; // timer
-    char frameInfoString[sizeof("FPS: *****.*, Frame time: ******")]; // string buffer for frame information
 
-    float dt_counter = 0.0f; // delta time for multiple frames, for calculating FPS smoothly
-    int frame_counter = 0; // counts frames for FPS calculation
-    int64_t frame_time_micro = 0; // time needed to draw frames in microseconds
-
+	FpsCounter fps_counter;
     while (window.isOpen()) {
-        // get delta time
-        float dt = clock.restart().asSeconds();
-
-        // Update FPS, smoothed over time
-        if (dt_counter >= fps_refresh_time) {
-            float fps = (float)frame_counter / dt_counter;
-            frame_time_micro /= frame_counter;
-            snprintf(frameInfoString, sizeof(frameInfoString), "FPS: %3.1f, Frame time: %6ld", fps, frame_time_micro);
-            fpsText.setString(frameInfoString);
-            dt_counter = 0.0f;
-            frame_counter = 0;
-            frame_time_micro = 0;
-        }
-        dt_counter += dt;
-        ++frame_counter;
+		fps_counter.count();
 
         // handle SFML events
         sf::Event event;
@@ -243,7 +228,10 @@ int main() {
                 moveForward = -1.0f;
             }
 
+
             // handle movement
+
+			float dt = fps_counter.get_delta_time();
             if (moveForward != 0.0f) {
                 sf::Vector2f moveVec = direction * moveSpeed * moveForward * dt;
 
@@ -421,8 +409,8 @@ int main() {
 
         window.clear();
         window.draw(lines, state);
-        window.draw(fpsText);
-        frame_time_micro += clock.getElapsedTime().asMicroseconds();
+		fps_counter.draw(&window);
+		fps_counter.update_frame_time();
         window.display();
     }
 
