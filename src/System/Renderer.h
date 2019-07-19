@@ -1,6 +1,6 @@
 #pragma once
 #include"stdafx.h"
-#include"Player.h"
+#include"Objects/Player.h"
 class Renderer
 {
 private:
