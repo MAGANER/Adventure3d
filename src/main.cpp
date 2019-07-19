@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include"System\FpsCounter.h"
 #include"System\Map.h"
+#include"Player.h"
 #include<iostream>
 using namespace std;
 
@@ -46,14 +47,7 @@ bool canMove(sf::Vector2f position, sf::Vector2f size) {
     return true;
 }
 
-// rotate a given vector with given float value in radians and return the result
-// see: https://en.wikipedia.org/wiki/Rotation_matrix#In_two_dimensions
-sf::Vector2f rotateVec(sf::Vector2f vec, float value) {
-    return sf::Vector2f(
-            vec.x * std::cos(value) - vec.y * std::sin(value),
-            vec.x * std::sin(value) + vec.y * std::cos(value)
-    );
-}
+
 
 int main() {
 
@@ -74,16 +68,11 @@ int main() {
     // render state that uses the texture
     sf::RenderStates state(&texture);
 
-    // player
-    sf::Vector2f position(2.5f, 2.0f); // coordinates in worldMap
-    sf::Vector2f direction(0.0f, 1.0f); // direction, relative to (0,0)
-    sf::Vector2f plane(-0.66f, 0.0f); // 2d raycaster version of the camera plane,
-                                     // must be perpendicular to rotation
-    float size_f = 0.375f; // dimensions of player collision box, in tiles
-    float moveSpeed = 2.0f; // player movement speed in tiles per second
-    float rotateSpeed = 1.0f; // player rotation speed in radians per second
 
-    sf::Vector2f size(size_f, size_f); // player collision box width and height, derived from size_f
+	//create hero with his start parameters
+	Player hero(Vector2f(2.5f, 2.0f),    //position
+		        Vector2f(0.0f, 1.0f),    //direction
+		        Vector2f(-0.66f, 0.0f)); //plane
 
     // create window
     sf::RenderWindow window(sf::VideoMode(screenWidth + 1, screenHeight), "Adventure 3D");
@@ -121,52 +110,13 @@ int main() {
                 break;
             }
         }
-        
-        // handle keyboard input
-        if (hasFocus) {
-            using kb = sf::Keyboard;
-
-            // moving forward or backwards (1.0 or -1.0)
-            float moveForward = 0.0f;
-
-            // get input
-            if (kb::isKeyPressed(kb::Up)) {
-                moveForward = 1.0f;
-            } else if (kb::isKeyPressed(kb::Down)) {
-                moveForward = -1.0f;
-            }
+      
 
 
-            // handle movement
-			float dt = fps_counter.get_delta_time();
-            if (moveForward != 0.0f) {
-                sf::Vector2f moveVec = direction * moveSpeed * moveForward * dt;
+		float dt = fps_counter.get_delta_time();
+		hero.move(hasFocus, dt, level); //also check can hero move
+		hero.rotate(hasFocus, dt);
 
-                if (canMove(sf::Vector2f(position.x + moveVec.x, position.y), size)) {
-                    position.x += moveVec.x;
-                }
-                if (canMove(sf::Vector2f(position.x, position.y + moveVec.y), size)) {
-                    position.y += moveVec.y;
-                }
-            }
-
-            // rotating rightwards or leftwards(1.0 or -1.0)
-            float rotateDirection = 0.0f;
-
-            // get input
-            if (kb::isKeyPressed(kb::Left)) {
-                rotateDirection = -1.0f;
-            } else if (kb::isKeyPressed(kb::Right)) {
-                rotateDirection = 1.0f;
-            }
-
-            // handle rotation
-            if (rotateDirection != 0.0f) {
-                float rotation = rotateSpeed * rotateDirection * dt;
-                direction = rotateVec(direction, rotation);
-                plane = rotateVec(plane, rotation);
-            }
-        }
 
         lines.resize(0);
 
@@ -175,8 +125,9 @@ int main() {
 
             // ray to emit
             float cameraX = 2 * x / (float)screenWidth - 1.0f; // x in camera space (between -1 and +1)
-            sf::Vector2f rayPos = position;
-            sf::Vector2f rayDir = direction + plane * cameraX;
+
+            sf::Vector2f rayPos = hero.get_position();
+            sf::Vector2f rayDir = hero.get_direction() + hero.get_plane() * cameraX;
 
             // NOTE: with floats, division by zero gives you the "infinity" value. This code depends on this.
 
