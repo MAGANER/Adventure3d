@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\System\FpsCounter.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\System\Map.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Objects\Player.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\System\Renderer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Game.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="System">
+      <UniqueIdentifier>{20b9e9f6-38c9-4abd-8fdb-a150cf7c98ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{02df0853-643b-4ad3-8e88-45a42e93c6dc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\System\FpsCounter.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\stdafx.h" />
+    <ClInclude Include="..\src\System\Map.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\System\RotateVec.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Objects\Player.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\System\Renderer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Game.h" />
+  </ItemGroup>
+</Project>
