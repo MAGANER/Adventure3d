@@ -15,6 +15,8 @@ private:
 	float size_f; // dimensions of player collision box, in tiles
 	float move_speed; // player movement speed in tiles per second
 	float rotate_speed; // player rotation speed in radians per second
+
+	float camera_height;// height of player camera(1.0 is ceiling, 0.0 is floor)
 public:
 	Player(Vector2f position, Vector2f direction, Vector2f plane);
 	virtual ~Player();
@@ -26,6 +28,8 @@ public:
 	Vector2f get_position();
 	Vector2f get_direction();
 	Vector2f get_plane();
+
+	float get_camera_height();
 private:
 	bool can_move(Vector2f position,Map level);
 };

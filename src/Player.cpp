@@ -12,6 +12,7 @@ Player::Player(Vector2f position, Vector2f direction, Vector2f plane)
 	size_f = 0.375f;
 	move_speed = 2.0f;
 	rotate_speed = 1.0f;
+	camera_height = 0.66f;
 
 	collision_box.x = size_f;
 	collision_box.y = size_f;
@@ -109,4 +110,9 @@ Vector2f Player::get_position()
 Vector2f Player::get_plane()
 {
 	return plane;
+}
+
+float Player::get_camera_height()
+{
+	return camera_height;
 }
