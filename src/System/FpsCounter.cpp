@@ -6,7 +6,10 @@ FpsCounter::FpsCounter()
 {
 	if (!font.loadFromFile("data/font/opensans.ttf")) 
 	{
-		fprintf(stderr, "Cannot open font!\n");
+		cout << stderr << "can not open font!" << endl <<"programm will be closed in 5 seconds!";
+
+		Time time_to_wait = seconds(5.0f);
+		sleep(time_to_wait); // to make user able to read message
 		exit(-1);
 	}
 
@@ -15,14 +18,10 @@ FpsCounter::FpsCounter()
 	frame_time_microsecs = 0;
 	fps_refresh_time = 0.1f;
 
-	//info_string_size = sizeof("FPS: *****.*, Frame time: ******");
-	//frame_info_string[info_string_size] = new char;
-
 	fps_text = new Text("", font, 50);
 }
 FpsCounter::~FpsCounter()
 {
-	//delete[] frame_info_string;
 	delete fps_text;
 }
 
@@ -35,7 +34,7 @@ void FpsCounter::count()
 	if (dt_counter >= fps_refresh_time) {
 		float fps = (float)frame_counter / dt_counter;
 		frame_time_microsecs /= frame_counter;
-		frame_info_string ="FPS:"+ to_string((int)fps) + "Frame time:";
+		frame_info_string ="FPS:"+ to_string((int)fps);
 		fps_text->setString(frame_info_string);
 		dt_counter = 0.0f;
 		frame_counter = 0;

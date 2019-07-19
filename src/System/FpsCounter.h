@@ -1,9 +1,5 @@
 #pragma once
-#include<string>
-#include"SFML\Graphics.hpp"
-using namespace sf;
-using namespace std;
-
+#include"stdafx.h"
 class FpsCounter
 {
 private:
