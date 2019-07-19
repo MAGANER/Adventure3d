@@ -17,7 +17,7 @@ private:
 	float rotate_speed; // player rotation speed in radians per second
 public:
 	Player(Vector2f position, Vector2f direction, Vector2f plane);
-	~Player();
+	virtual ~Player();
 
 	//get keyboard input and handle movement/rotation
 	void move(bool has_focus, float dt, Map level);
